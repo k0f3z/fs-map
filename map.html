@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Франшиза пекарни | Калькулятор прибыли и карта регионов</title>
-    <!-- Подключение Яндекс Карт API -->
     <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_ключ_api&lang=ru_RU" type="text/javascript"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
@@ -489,7 +488,6 @@
             </div>
         </div>
         <div class="two-columns">
-            <!-- Левая - ассортимент -->
             <div class="col-left">
                 <div class="section-title">Дополнительный ассортимент в пекарне</div>
                 <div class="assortment-box">
@@ -577,7 +575,6 @@
 </div>
 
 <script>
-    // КАЛЬКУЛЯТОР - ПОЛНОСТЬЮ РАБОТАЕТ
     const baseChecks = 500;
     const baseRevenueFull = 2015000;
     const profitMargin = 0.25;
@@ -677,12 +674,11 @@
         updateUI();
     });
 
-    // Инициализация
     updateUI();
 </script>
 
 <script>
-    // ДАННЫЕ ГОРОДОВ (сгруппированы по городам, каждый город имеет массив адресов)
+    // ДАННЫЕ ГОРОДОВ
     const citiesDataRaw = [
         { name: "Курск", lat: 51.7143585, lng: 36.1369776, status: "free", address: ["Клыкова 100"], region: "Центральный" },
         { name: "Иркутск", lat: 52.2489522, lng: 104.2721103, status: "free", address: ["Лермонтова 277А"], region: "Сибирь" },
