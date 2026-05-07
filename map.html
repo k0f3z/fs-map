@@ -588,10 +588,10 @@
 
 <script>
     const baseChecks = 500;
-    const baseRevenueFull = 2015000;
-    const profitMargin = 0.25;
+    const baseRevenueFull = 2900000;
+    const profitMargin = 0.203;
     const regionFactor = { million: 1.0, other: 0.85 };
-    const assortmentBonus = { confectionery: 0.09, culinary: 0.09, related: 0.09 };
+    const assortmentBonus = { confectionery: 0.07, culinary: 0.05, related: 0.03 };
 
     let currentChecks = 500;
     let currentRegion = "million";
@@ -601,14 +601,31 @@
     function calcRevenueSingle() {
         let checksFactor = currentChecks / baseChecks;
         let regFact = regionFactor[currentRegion];
+
+        // Базовая выручка без бонусов ассортимента
+        let baseRevenue = baseRevenueFull;
+
+        // Вычитаем бонусы ассортимента из базовой (если они отключены)
         let activeBonusSum = 0;
-        if (currentAssort.confectionery) activeBonusSum += assortmentBonus.confectionery;
-        if (currentAssort.culinary) activeBonusSum += assortmentBonus.culinary;
-        if (currentAssort.related) activeBonusSum += assortmentBonus.related;
-        let assortFactor = 1 + activeBonusSum;
-        let revenue = baseRevenueFull * checksFactor * regFact * (assortFactor / 1.27);
+        if (!currentAssort.confectionery) activeBonusSum += 0.07;
+        if (!currentAssort.culinary) activeBonusSum += 0.12;
+        if (!currentAssort.related) activeBonusSum += 0.03;
+
+        let revenue = baseRevenue * checksFactor * regFact * (1 - activeBonusSum);
         return Math.round(revenue);
     }
+    
+    // function calcRevenueSingle() {
+    //     let checksFactor = currentChecks / baseChecks;
+    //     let regFact = regionFactor[currentRegion];
+    //     let activeBonusSum = 0;
+    //     if (currentAssort.confectionery) activeBonusSum += assortmentBonus.confectionery;
+    //     if (currentAssort.culinary) activeBonusSum += assortmentBonus.culinary;
+    //     if (currentAssort.related) activeBonusSum += assortmentBonus.related;
+    //     let assortFactor = 1 + activeBonusSum;
+    //     let revenue = baseRevenueFull * checksFactor * regFact * (assortFactor / 1.27);
+    //     return Math.round(revenue);
+    // }
 
     function updateUI() {
         let revenue = calcRevenueSingle();
