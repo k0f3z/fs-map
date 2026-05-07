@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Франшиза пекарни | Калькулятор прибыли и карта регионов</title>
+    <!-- Подключение Яндекс Карт API -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_ключ_api&lang=ru_RU" type="text/javascript"></script>
+    <!-- Подключение шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8faf5;
+            color: #1e2a1f;
+            padding: 40px 24px;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        /* Общие стили блоков */
+        .block {
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+            padding: 32px 28px;
+            margin-bottom: 48px;
+            transition: all 0.2s ease;
+        }
+
+        .block-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2b4b2b;
+        }
+
+        .block-sub {
+            font-size: 16px;
+            color: #5a6e5a;
+            margin-bottom: 32px;
+            border-left: 3px solid #e0b03b;
+            padding-left: 16px;
+        }
+
+        /* КАЛЬКУЛЯТОР */
+        .calc-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .calc-options {
+            flex: 1.2;
+            min-width: 260px;
+        }
+
+        .calc-result {
+            flex: 1;
+            background: #fef9e8;
+            border-radius: 28px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid #f0e2c5;
+        }
+
+        .param-group {
+            margin-bottom: 28px;
+        }
+
+        .param-label {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: block;
+            font-size: 16px;
+            color: #2e3f2e;
+        }
+
+        select, .checkbox-group {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            border: 1px solid #dde0d5;
+            background: white;
+            font-family: inherit;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #e0b03b;
+            box-shadow: 0 0 0 3px rgba(224,176,59,0.2);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #e0b03b;
+            cursor: pointer;
+        }
+
+        .checks-wrapper {
+            background: #f9f9f4;
+            border-radius: 20px;
+            padding: 12px 16px;
+        }
+
+        .quantity-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .qty-btn {
+            background: #f1f3ec;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: #2e4e2e;
+        }
+
+        .qty-btn.active {
+            background: #e0b03b;
+            color: white;
+            box-shadow: 0 2px 6px rgba(224,176,59,0.4);
+        }
+
+        .qty-btn:hover {
+            background: #d6dccc;
+        }
+
+        .revenue-box, .profit-box {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .revenue-label, .profit-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #8b7a4b;
+        }
+
+        .revenue-amount {
+            font-size: 38px;
+            font-weight: 800;
+            color: #2b4b2b;
+            margin: 12px 0 4px;
+        }
+
+        .profit-amount {
+            font-size: 38px;
+            font-weight: 800;
+            color: #c7731e;
+            margin: 12px 0 4px;
+        }
+
+        .rub-symbol {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .divider-calc {
+            width: 80px;
+            height: 2px;
+            background: #e0b03b;
+            margin: 20px auto;
+        }
+
+        .points-slider {
+            margin-top: 24px;
+            background: #f8f5e9;
+            border-radius: 28px;
+            padding: 20px 20px;
+        }
+
+        .points-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .points-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .point-btn {
+            background: white;
+            border: 1px solid #ddd6c0;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 14px;
+        }
+
+        .point-btn.active {
+            background: #2b4b2b;
+            border-color: #2b4b2b;
+            color: white;
+        }
+
+        .total-profit {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        /* КАРТА + БОКОВОЕ МЕНЮ + КНОПКИ РЕГИОНОВ */
+        .map-fullwrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .regions-sidebar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 280px;
+            background: #fefcf5;
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid #efe6d4;
+            height: auto;
+        }
+
+        .regions-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #2b4b2b;
+        }
+
+        .region-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .region-btn {
+            background: white;
+            border: 1px solid #e2d9c8;
+            border-radius: 60px;
+            padding: 10px 16px;
+            text-align: left;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .region-btn:hover {
+            background: #e0b03b10;
+            border-color: #e0b03b;
+        }
+
+        .region-btn.active-region {
+            background: #e0b03b;
+            border-color: #e0b03b;
+            color: white;
+        }
+
+        .region-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            background: #47A847;
+            display: inline-block;
+        }
+        .region-indicator.busy {
+            background: #E6792A;
+        }
+
+        .map-container {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .search-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+            background: #f3f5ef;
+            padding: 20px;
+            border-radius: 28px;
+            margin-bottom: 20px;
+        }
+
+        .search-input-group {
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .search-input-group label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+            color: #475a3b;
+        }
+
+        .city-search {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 60px;
+            border: 1px solid #cccab3;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .clear-search-btn {
+            background: #e9e4d4;
+            border: none;
+            padding: 0 20px;
+            border-radius: 60px;
+            font-weight: 500;
+            cursor: pointer;
+            height: 48px;
+        }
+
+        .search-status {
+            flex: 3;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 60px;
+            border: 1px solid #cccab3;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .status-text {
+            font-weight: 500;
+        }
+
+        .free-status {
+            color: #2e7d32;
+            background: #e8f5e9;
+            padding: 6px 14px;
+            border-radius: 40px;
+        }
+
+        .busy-status {
+            color: #b85c00;
+            background: #fff0e0;
+            padding: 6px 14px;
+            border-radius: 40px;
+        }
+
+        .book-btn {
+            background: #e0b03b;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .book-btn:hover {
+            background: #c2922a;
+            transform: scale(0.97);
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid #eae4d2;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .modal-active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            border-radius: 40px;
+            max-width: 420px;
+            width: 90%;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .modal-form input {
+            width: 100%;
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 60px;
+            border: 1px solid #ddd;
+        }
+
+        .close-modal {
+            background: #2b4b2b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 880px) {
+            .map-fullwrapper { flex-direction: column; }
+            .regions-sidebar { width: 100%; }
+            .block { padding: 24px 16px; }
+            .revenue-amount, .profit-amount { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- БЛОК 1: КАЛЬКУЛЯТОР ПРИБЫЛИ -->
+    <div style="display: none;" class="block">
+        <div class="block-title">🍞 Калькулятор прибыли пекарни</div>
+        <div class="block-sub">Выберите параметры вашей будущей сети — рассчитайте прогноз выручки и чистой прибыли</div>
+
+        <div class="calc-grid">
+            <div class="calc-options">
+                <div class="param-group">
+                    <span class="param-label">📍 Регион открытия</span>
+                    <select id="regionSelect">
+                        <option value="million">Города-миллионники (Москва, СПБ, и др.)</option>
+                        <option value="other">Другие города (до 1 млн)</option>
+                    </select>
+                </div>
+
+                <div class="param-group">
+                    <span class="param-label">🧾 Кол-во чеков в день (на одну точку)</span>
+                    <div class="quantity-buttons" id="checksButtons"></div>
+                </div>
+
+                <div class="param-group">
+                    <span class="param-label">🍰 Дополнительный ассортимент</span>
+                    <div class="checks-wrapper" id="assortmentGroup">
+                        <label class="checkbox-item"><input type="checkbox" value="confectionery" checked> Кондитерка</label>
+                        <label class="checkbox-item"><input type="checkbox" value="culinary" checked> Кулинария</label>
+                        <label class="checkbox-item"><input type="checkbox" value="related" checked> Сопутствующие товары</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calc-result">
+                <div class="revenue-box">
+                    <div class="revenue-label">ПРОГНОЗИРУЕМАЯ ВЫРУЧКА (1 точка)</div>
+                    <div class="revenue-amount"><span id="revenueSingle">2 015 000</span> <span class="rub-symbol">₽</span></div>
+                </div>
+                <div class="divider-calc"></div>
+                <div class="profit-box">
+                    <div class="profit-label">ЧИСТАЯ ПРИБЫЛЬ (1 точка)</div>
+                    <div class="profit-amount"><span id="profitSingle">503 750</span> <span class="rub-symbol">₽</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="points-slider">
+            <div class="points-control">
+                <span class="param-label" style="margin-bottom: 0;">🏢 Количество пекарен в сети</span>
+                <div class="points-buttons" id="pointsButtons"></div>
+            </div>
+            <div class="total-profit">
+                📊 Итоговая чистая прибыль сети: <strong id="totalProfit">503 750 ₽</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 2: ИНТЕРАКТИВНАЯ КАРТА + БОКОВОЕ МЕНЮ РЕГИОНОВ -->
+    <div class="block">
+        <div class="block-title">🗺️ География и доступность регионов</div>
+        <div class="block-sub">260+ пекарен по всей стране. Выберите регион из меню или кликните на карту — оцените плотность и найдите свободные ниши.</div>
+
+        <div class="map-fullwrapper">
+            <!-- Боковое меню регионов -->
+            <div class="regions-sidebar">
+                <div class="regions-title">
+                    <span>📍 Регионы присутствия</span>
+                </div>
+                <div class="region-buttons" id="regionButtonsList">
+                    <!-- Динамические кнопки регионов будут добавлены из JS -->
+                </div>
+                <div style="margin-top: 20px; font-size: 12px; color: #867a5a; border-top: 1px solid #efe0c4; padding-top: 14px;">
+                    🟢 Зеленый — город свободен<br>
+                    🟠 Оранжевый — есть действующие пекарни
+                </div>
+            </div>
+
+            <div class="map-container">
+                <div class="search-section">
+                    <div class="search-input-group">
+                        <label>🔍 Поиск города</label>
+                        <input type="text" id="citySearchInput" class="city-search" placeholder="Например: Оренбург, Хабаровск, Москва...">
+                    </div>
+                    <button id="clearSearchBtn" class="clear-search-btn">✖️ Сбросить</button>
+                    <div class="search-status" id="searchStatusBlock">
+                        <div class="status-text" id="statusMessage">Введите город или выберите регион</div>
+                        <button id="bookCityBtn" class="book-btn" style="display: none;">💼 Бронировать франшизу</button>
+                    </div>
+                </div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно формы обратной связи -->
+<div id="callbackModal" class="modal-overlay">
+    <div class="modal-form">
+        <h3>📞 Забронировать город</h3>
+        <p style="margin: 8px 0; font-size: 14px;">Оставьте контакты, наш менеджер свяжется с вами</p>
+        <input type="text" placeholder="Ваше имя" id="modalName">
+        <input type="tel" placeholder="Телефон" id="modalPhone">
+        <input type="email" placeholder="Email" id="modalEmail">
+        <button id="submitModalBtn" class="book-btn" style="background:#2b4b2b; width:100%;">Отправить заявку</button>
+        <button id="closeModalBtn" class="close-modal" style="background:#aaa;">Закрыть</button>
+    </div>
+</div>
+
+<script>
+    // ------------------ 1. КАЛЬКУЛЯТОР ------------------
+    const baseChecks = 500;
+    const baseRevenueFull = 2015000;
+    const profitMargin = 0.25;
+    const regionFactor = { million: 1.0, other: 0.85 };
+    const assortmentBonus = { confectionery: 0.09, culinary: 0.09, related: 0.09 };
+
+    let currentChecks = 500;
+    let currentRegion = "million";
+    let currentAssort = { confectionery: true, culinary: true, related: true };
+    let currentPoints = 1;
+
+    function calcRevenueSingle() {
+        let checksFactor = currentChecks / baseChecks;
+        let regFact = regionFactor[currentRegion];
+        let activeBonusSum = 0;
+        if(currentAssort.confectionery) activeBonusSum += assortmentBonus.confectionery;
+        if(currentAssort.culinary) activeBonusSum += assortmentBonus.culinary;
+        if(currentAssort.related) activeBonusSum += assortmentBonus.related;
+        let assortFactor = 1 + activeBonusSum;
+        let revenue = baseRevenueFull * checksFactor * regFact * (assortFactor / 1.27);
+        return Math.round(revenue);
+    }
+
+    function updateCalculatorUI() {
+        let revenue = calcRevenueSingle();
+        let profitSingle = Math.round(revenue * profitMargin);
+        document.getElementById("revenueSingle").innerText = revenue.toLocaleString('ru-RU');
+        document.getElementById("profitSingle").innerText = profitSingle.toLocaleString('ru-RU');
+        document.getElementById("totalProfit").innerHTML = (profitSingle * currentPoints).toLocaleString('ru-RU') + " ₽";
+        document.querySelectorAll('.qty-btn').forEach(btn => {
+            if(parseInt(btn.getAttribute('data-val')) === currentChecks) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        document.querySelectorAll('.point-btn').forEach(btn => {
+            if(parseInt(btn.innerText) === currentPoints) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+    }
+
+    function initChecksButtons() {
+        const checksValues = [300,400,500,600,700,800,900,1000];
+        const container = document.getElementById("checksButtons");
+        if(!container) return;
+        container.innerHTML = "";
+        checksValues.forEach(val => {
+            let btn = document.createElement("button");
+            btn.innerText = val;
+            btn.classList.add("qty-btn");
+            if(val === currentChecks) btn.classList.add("active");
+            btn.setAttribute("data-val", val);
+            btn.addEventListener("click", () => { currentChecks = val; updateCalculatorUI(); });
+            container.appendChild(btn);
+        });
+    }
+
+    function initPointsButtons() {
+        const pointsContainer = document.getElementById("pointsButtons");
+        if(!pointsContainer) return;
+        pointsContainer.innerHTML = "";
+        for(let i=1; i<=10; i++) {
+            let btn = document.createElement("button");
+            btn.innerText = i;
+            btn.classList.add("point-btn");
+            if(i === currentPoints) btn.classList.add("active");
+            btn.addEventListener("click", () => { currentPoints = i; updateCalculatorUI(); });
+            pointsContainer.appendChild(btn);
+        }
+    }
+
+    function bindAssortmentListeners() {
+        const confCheck = document.querySelector("input[value='confectionery']");
+        const culCheck = document.querySelector("input[value='culinary']");
+        const relCheck = document.querySelector("input[value='related']");
+        if(!confCheck) return;
+        function updateAssort() {
+            currentAssort.confectionery = confCheck.checked;
+            currentAssort.culinary = culCheck.checked;
+            currentAssort.related = relCheck.checked;
+            updateCalculatorUI();
+        }
+        confCheck.addEventListener("change", updateAssort);
+        culCheck.addEventListener("change", updateAssort);
+        relCheck.addEventListener("change", updateAssort);
+    }
+
+    const regionSelect = document.getElementById("regionSelect");
+    if(regionSelect) {
+        regionSelect.addEventListener("change", (e) => { currentRegion = e.target.value; updateCalculatorUI(); });
+    }
+
+    // ------------------ 2. КАРТА И ГЕОДАННЫЕ ------------------
+    // const citiesDB = [
+    //     { name: "Москва", lat: 55.7558, lng: 37.6176, status: "busy", addresses: ["ул. Тверская 15", "Ленинский пр-т 28", "Кутузовский пр-т 32"], region: "Центральный" },
+    //     { name: "Санкт-Петербург", lat: 59.9343, lng: 30.3351, status: "busy", addresses: ["Невский пр-т 88", "пр. Большевиков 12"], region: "Северо-Запад" },
+    //     { name: "Новосибирск", lat: 55.0084, lng: 82.9357, status: "busy", addresses: ["Красный пр-т 101", "ул. Гоголя 44"], region: "Сибирь" },
+    //     { name: "Екатеринбург", lat: 56.8389, lng: 60.6057, status: "busy", addresses: ["ул. Малышева 51"], region: "Урал" },
+    //     { name: "Казань", lat: 55.7961, lng: 49.1064, status: "busy", addresses: ["ул. Баумана 70"], region: "Приволжье" },
+    //     { name: "Нижний Новгород", lat: 56.2965, lng: 43.9361, status: "busy", addresses: ["ул. Большая Покровская 18"], region: "Приволжье" },
+    //     { name: "Челябинск", lat: 55.1644, lng: 61.4368, status: "busy", addresses: ["пр. Ленина 55"], region: "Урал" },
+    //     { name: "Самара", lat: 53.1959, lng: 50.1002, status: "busy", addresses: ["ул. Полевая 12"], region: "Приволжье" },
+    //     { name: "Омск", lat: 54.9885, lng: 73.3242, status: "free", region: "Сибирь" },
+    //     { name: "Ростов-на-Дону", lat: 47.2357, lng: 39.7015, status: "free", region: "Юг" },
+    //     { name: "Уфа", lat: 54.7388, lng: 55.9721, status: "free", region: "Приволжье" },
+    //     { name: "Красноярск", lat: 56.0106, lng: 92.8526, status: "busy", addresses: ["пр. Мира 102"], region: "Сибирь" },
+    //     { name: "Пермь", lat: 58.0104, lng: 56.2294, status: "free", region: "Приволжье" },
+    //     { name: "Воронеж", lat: 51.6605, lng: 39.2003, status: "free", region: "Центральный" },
+    //     { name: "Волгоград", lat: 48.708, lng: 44.5133, status: "free", region: "Юг" },
+    //     { name: "Хабаровск", lat: 48.4802, lng: 135.0719, status: "busy", addresses: ["ул. Муравьёва-Амурского 23"], region: "Дальний Восток" },
+    //     { name: "Владивосток", lat: 43.1155, lng: 131.8855, status: "busy", addresses: ["ул. Светланская 15"], region: "Дальний Восток" },
+    //     { name: "Оренбург", lat: 51.7682, lng: 55.0970, status: "busy", addresses: ["пр. Парковый 7"], region: "Приволжье" },
+    //     { name: "Иркутск", lat: 52.2864, lng: 104.2807, status: "free", region: "Сибирь" },
+    //     { name: "Тюмень", lat: 57.1613, lng: 65.5257, status: "free", region: "Урал" },
+    //     { name: "Кемерово", lat: 55.3544, lng: 86.0898, status: "free", region: "Сибирь" },
+    //     { name: "Калининград", lat: 54.7104, lng: 20.4522, status: "free", region: "Северо-Запад" }
+    // ];
+
+    const citiesDB = [
+        { name: "Курск", lat: 51.7143585, lng: 36.1369776, status: "free", addresses: ["Клыкова 100"], region: "Центральный" },
+        { name: "Иркутск", lat: 52.2489522, lng: 104.2721103, status: "free", addresses: ["Лермонтова 277А"], region: "Сибирь" },
+        { name: "Иркутск", lat: 52.2926042, lng: 104.2940434, status: "free", addresses: ["Франк-Каменецкого 13/1"], region: "Сибирь" },
+        { name: "Казань", lat: 55.776432, lng: 49.1079436, status: "free", addresses: ["Татарстан 53А"], region: "Приволжье" },
+        { name: "Курск", lat: 51.6675992, lng: 36.1412789, status: "free", addresses: ["Кулакова 20"], region: "Центральный" },
+        { name: "Казань", lat: 55.7863061, lng: 49.1188005, status: "free", addresses: ["Университетская 4"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9099107, lng: 52.3161217, status: "free", addresses: ["Фахретдина 7"], region: "Приволжье" },
+        { name: "Казань", lat: 55.783514, lng: 49.2273133, status: "free", addresses: ["Вагапова 3"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8442453, lng: 48.9119046, status: "free", addresses: ["Державина 9б"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2884771, lng: 104.2820407, status: "free", addresses: ["Сухэ Батора 5/1"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8404258, lng: 49.2404847, status: "free", addresses: ["Яблоневая, 1д"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.8981156, lng: 52.2646166, status: "free", addresses: ["Ленина 129"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8391537, lng: 49.1112768, status: "free", addresses: ["19 квартал 8/1"], region: "Приволжье" },
+        { name: "Курск", lat: 51.7183807, lng: 36.1357735, status: "free", addresses: ["Клыкова 92"], region: "Центральный" },
+        { name: "Иркутск", lat: 52.2770587, lng: 104.3402764, status: "free", addresses: ["советская 176"], region: "Сибирь" },
+        { name: "Казань", lat: 55.7510544, lng: 49.1841993, status: "free", addresses: ["Камая 1"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7885587, lng: 49.1338546, status: "free", addresses: ["Маяковского 13/34"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8386003, lng: 49.1466213, status: "free", addresses: ["Адоратского 31Б"], region: "Приволжье" },
+        { name: "Казань", lat: 55.898075, lng: 49.1526064, status: "free", addresses: ["Татарстан 16"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2758095, lng: 104.330793, status: "free", addresses: ["Трилиссера 90"], region: "Сибирь" },
+        { name: "Казань", lat: 55.7536922, lng: 49.1896224, status: "free", addresses: ["Мавлютова 17"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2555275, lng: 104.3373381, status: "free", addresses: ["Байкальская 207"], region: "Сибирь" },
+        { name: "Казань", lat: 55.7386322, lng: 49.1501822, status: "free", addresses: ["Ярдем 25"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7214749, lng: 49.330486, status: "free", addresses: ["Олимпийская 5"], region: "Приволжье" },
+        { name: "Казань", lat: 55.79242, lng: 49.111398, status: "free", addresses: ["Баумана 29/11"], region: "Приволжье" },
+        { name: "Москва", lat: 55.6620097, lng: 37.7338629, status: "free", addresses: ["Люблинская 78к2"], region: "Центральный" },
+        { name: "Альметьевск", lat: 54.8995865, lng: 52.3033771, status: "free", addresses: ["Радищева 65"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.8902917, lng: 52.2653223, status: "free", addresses: ["Новикова 1"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2884771, lng: 104.2820407, status: "free", addresses: ["Сибирских партизан 1А"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8114652, lng: 49.1809597, status: "free", addresses: ["Сибирский Тракт 25"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7430458, lng: 49.2221066, status: "free", addresses: ["Зорге 101"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7708056, lng: 49.1394747, status: "free", addresses: ["Шаляпина 26"], region: "Приволжье" },
+        { name: "Курск", lat: 51.6509906, lng: 36.1400848, status: "free", addresses: ["Магистральный проезд 18"], region: "Центральный" },
+        { name: "Иркутск", lat: 52.2646153, lng: 104.314296, status: "free", addresses: ["Волжская 15"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8236088, lng: 49.1313669, status: "free", addresses: ["Четаева 46А"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7993822, lng: 49.2408118, status: "free", addresses: ["Курынова 5к2"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.8977318, lng: 52.3582317, status: "free", addresses: ["Гвардейская 40"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2341644, lng: 104.2872008, status: "free", addresses: ["Академическая 4"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8354469, lng: 49.1287651, status: "free", addresses: ["Чуйкова 40"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7633403, lng: 49.2009148, status: "free", addresses: ["Яраткан 1"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2633089, lng: 104.3136546, status: "free", addresses: ["Байкальская 125"], region: "Сибирь" },
+        { name: "Казань", lat: 55.7437681, lng: 49.2159637, status: "free", addresses: ["Фучика 30"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2554227, lng: 104.2345124, status: "free", addresses: ["Первомайский 24/2"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8322237, lng: 49.1520895, status: "free", addresses: ["Лаврентьева 9"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7475379, lng: 87.1198709, status: "free", addresses: ["Бардина 2"], region: "Кузбасс" },
+        { name: "Казань", lat: 55.8177379, lng: 48.8957488, status: "free", addresses: ["Революционная 1"], region: "Приволжье" },
+        { name: "Зеленодольск", lat: 55.8495289, lng: 48.5240425, status: "free", addresses: ["Карла Маркса 60"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2884771, lng: 104.2820407, status: "free", addresses: ["БайкЧекотова 1"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8005357, lng: 49.1824519, status: "free", addresses: ["Ершова 78Б"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.1629542, lng: 104.3880464, status: "free", addresses: ["Депутатская 4"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8228034, lng: 49.1327921, status: "free", addresses: ["Амирхана 17"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8634278, lng: 49.0787213, status: "free", addresses: ["Максимова 50"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.144652, lng: 47.2145556, status: "free", addresses: ["Спиридона Михайлова 1"], region: "Чувашия" },
+        { name: "Альметьевск", lat: 54.9029781, lng: 52.3508073, status: "free", addresses: ["Герцена 94Г"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7687756, lng: 49.2325345, status: "free", addresses: ["Фучика 96"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9037357, lng: 52.3130366, status: "free", addresses: ["Тукая 42"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7471989, lng: 49.1983165, status: "free", addresses: ["Сыртлановой 16"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8174529, lng: 49.0584809, status: "free", addresses: ["Халтурина 8/20"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9253648, lng: 52.3608959, status: "free", addresses: ["Советская 19"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2519771, lng: 104.255908, status: "free", addresses: ["Тена 14"], region: "Сибирь" },
+        { name: "Казань", lat: 55.7929993, lng: 49.2476632, status: "free", addresses: ["Аббасова 4"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8364008, lng: 49.1057228, status: "free", addresses: ["Чуйкова 5"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7760511, lng: 49.2155067, status: "free", addresses: ["Победы 139к3"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7592912, lng: 87.1189551, status: "free", addresses: ["Металлургов 32"], region: "Кузбасс" },
+        { name: "Казань", lat: 55.7810029, lng: 49.2243117, status: "free", addresses: ["Сахарова 27"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.324543, lng: 104.3199876, status: "free", addresses: ["Топкинский 39"], region: "Сибирь" },
+        { name: "Казань", lat: 55.8635526, lng: 48.8774137, status: "free", addresses: ["Арсланова 13"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7459138, lng: 49.189965, status: "free", addresses: ["Парина 6"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8296686, lng: 49.073967, status: "free", addresses: ["Шамиля Усманова 16А"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8496289, lng: 48.9010012, status: "free", addresses: ["Залесная 40"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7476158, lng: 49.2069339, status: "free", addresses: ["Проспект Победы 46В"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2643279, lng: 104.207995, status: "free", addresses: ["Рябикова 32Г"], region: "Сибирь" },
+        { name: "Чебоксары", lat: 56.1391905, lng: 47.2178571, status: "free", addresses: ["Радужная 7"], region: "Чувашия" },
+        { name: "Заинск", lat: 55.2876884, lng: 52.0054275, status: "free", addresses: ["Ялчыгола 5В"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8280801, lng: 49.0574251, status: "free", addresses: ["Кулахметова 19Б"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8586994, lng: 48.9055665, status: "free", addresses: ["Альфии Авзаловой 5"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9024279, lng: 52.2990883, status: "free", addresses: ["Ленина 36"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.8992298, lng: 52.2907383, status: "free", addresses: ["Ленина 68"], region: "Приволжье" },
+        { name: "Казань", lat: 55.767841, lng: 49.2323677, status: "free", addresses: ["Фучика 94"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7299622, lng: 49.1760901, status: "free", addresses: ["Баки Урманче 9"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2838267, lng: 104.2959094, status: "free", addresses: ["Дзержинского 34"], region: "Сибирь" },
+        { name: "Иркутск", lat: 52.2687614, lng: 104.3222402, status: "free", addresses: ["Лыткина 2/1"], region: "Сибирь" },
+        { name: "Курск", lat: 51.7373, lng: 36.1874, status: "free", addresses: ["Лесная 2-й Промышленный переулок, 13/4"], region: "Центральный" },
+        { name: "Чебоксары", lat: 56.15, lng: 47.25, status: "free", addresses: ["Б. Хмельницкого 109/3"], region: "Чувашия" },
+        { name: "Казань", lat: 55.8649111, lng: 49.0861486, status: "free", addresses: ["Беломорская 6"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7455233, lng: 49.2627861, status: "free", addresses: ["Лиственная 23А"], region: "Приволжье" },
+        { name: "Курск", lat: 51.7081073, lng: 36.154885, status: "free", addresses: ["Сумская 19"], region: "Центральный" },
+        { name: "Иркутск", lat: 52.8780153, lng: 103.6096759, status: "free", addresses: ["Ленина 24"], region: "Сибирь" },
+        { name: "Альметьевск", lat: 54.8974958, lng: 52.2706943, status: "free", addresses: ["Ленина 119"], region: "Приволжье" },
+        { name: "Заинск", lat: 55.2802995, lng: 52.0023929, status: "free", addresses: ["Комсомольская 52Б"], region: "Приволжье" },
+        { name: "Курск", lat: 51.7090446, lng: 36.1462338, status: "free", addresses: ["Дейнеки 1"], region: "Центральный" },
+        { name: "Казань", lat: 55.8599327, lng: 49.1009415, status: "free", addresses: ["Максимова 2А"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2633089, lng: 104.3136546, status: "free", addresses: ["Байкальская 206 (МС-2)"], region: "Сибирь" },
+        { name: "Казань", lat: 55.857958, lng: 49.0857342, status: "free", addresses: ["Копылова 14"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7398033, lng: 49.1965918, status: "free", addresses: ["Дубравная 51Г"], region: "Приволжье" },
+        { name: "Курск", lat: 51.7231564, lng: 36.173513, status: "free", addresses: ["Дзержинского 47"], region: "Центральный" },
+        { name: "Казань", lat: 55.7856387, lng: 49.2182387, status: "free", addresses: ["Проспект Победы 147"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8076988, lng: 49.0803755, status: "free", addresses: ["Шоссейная 18"], region: "Приволжье" },
+        { name: "Казань", lat: 55.869634, lng: 49.020017, status: "free", addresses: ["Гудованцева 27"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8244293, lng: 48.8972817, status: "free", addresses: ["Ильича 19/43"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.901889, lng: 52.2651007, status: "free", addresses: ["Ленина 112"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7550105, lng: 49.2301766, status: "free", addresses: ["Фучика 105А"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.1338015, lng: 47.1524965, status: "free", addresses: ["Лукина 5"], region: "Чувашия" },
+        { name: "Казань", lat: 55.8610053, lng: 49.2184132, status: "free", addresses: ["Мира 45 Дербышки"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8262713, lng: 49.1013886, status: "free", addresses: ["Ямашева 19А"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2820844, lng: 104.2947209, status: "free", addresses: ["Литвинова 17"], region: "Сибирь" },
+        { name: "Иркутск", lat: 52.2433835, lng: 104.2732376, status: "free", addresses: ["Лермонтова 311"], region: "Сибирь" },
+        { name: "Заинск", lat: 55.2867071, lng: 51.9988308, status: "free", addresses: ["Нефтяников 21А"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.7594589, lng: 52.4121451, status: "free", addresses: ["Шамиля Усманова 88Б"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8234344, lng: 49.0478048, status: "free", addresses: ["Фрунзе 9"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7888181, lng: 49.1520032, status: "free", addresses: ["Вишневского 8/35"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.0687681, lng: 47.2828971, status: "free", addresses: ["Розы Люксембург 4"], region: "Чувашия" },
+        { name: "Чебоксары", lat: 56.1311797, lng: 47.2618238, status: "free", addresses: ["Ярмарочная 12"], region: "Чувашия" },
+        { name: "Казань", lat: 55.8619124, lng: 49.0902441, status: "free", addresses: ["Лукина 11Б"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7545965, lng: 49.2431561, status: "free", addresses: ["Салиха Батыева 15"], region: "Приволжье" },
+        { name: "Зеленодольск", lat: 55.8455901, lng: 48.5266056, status: "free", addresses: ["Ленина 70"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.7357509, lng: 52.4167499, status: "free", addresses: ["Проспект Московский 113"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8515902, lng: 49.071185, status: "free", addresses: ["Белинского 9/6"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7431498, lng: 49.1422038, status: "free", addresses: ["Кулагина 4"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7887, lng: 49.1221, status: "free", addresses: ["Айдарова 8А корп 1"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7686414, lng: 49.1658237, status: "free", addresses: ["Маршальская 25"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7887, lng: 49.1221, status: "free", addresses: ["КЗН Натана Рахлина 5"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7925688, lng: 49.165304, status: "free", addresses: ["Ершова 32"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7236463, lng: 49.1724116, status: "free", addresses: ["Рауиса Гареева 96"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.1377033, lng: 47.1656496, status: "free", addresses: ["Мичмана Павлова 64"], region: "Чувашия" },
+        { name: "Зеленодольск", lat: 55.8560624, lng: 48.5776253, status: "free", addresses: ["Столичная 37А"], region: "Приволжье" },
+        { name: "Заинск", lat: 55.293231, lng: 51.9900842, status: "free", addresses: ["Проспект Победы 1-06А"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7345394, lng: 49.173542, status: "free", addresses: ["Булатова 1А"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.1018926, lng: 47.2826765, status: "free", addresses: ["Эгерский бульвар 20Б"], region: "Чувашия" },
+        { name: "Казань", lat: 55.7982939, lng: 49.0590233, status: "free", addresses: ["Урицкого 27"], region: "Приволжье" },
+        { name: "Зеленодольск", lat: 55.8510445, lng: 48.4934661, status: "free", addresses: ["Гагарина 17"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7328561, lng: 49.1753166, status: "free", addresses: ["Баки Урманче 6"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7832517, lng: 49.147137, status: "free", addresses: ["Калинина 63"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.7015683, lng: 52.354898, status: "free", addresses: ["Татарстан 16"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.6977062, lng: 52.3162495, status: "free", addresses: ["проспект Мусы Джалиля 20"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6428907, lng: 51.8033298, status: "free", addresses: ["Проспект Мира 67"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.8975426, lng: 52.3428375, status: "free", addresses: ["Кутузова 9"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6589069, lng: 51.8260844, status: "free", addresses: ["Бызова 8"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7772756, lng: 49.2222304, status: "free", addresses: ["Закиева 5"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7821077, lng: 49.145368, status: "free", addresses: ["Калинина 32"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.116914, lng: 47.1826701, status: "free", addresses: ["Энтузиастов 31"], region: "Чувашия" },
+        { name: "Казань", lat: 55.7551138, lng: 49.2323364, status: "free", addresses: ["Фучика 72"], region: "Приволжье" },
+        { name: "Казань", lat: 55.750305, lng: 49.1842935, status: "free", addresses: ["Камая 8а"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7406138, lng: 49.2643799, status: "free", addresses: ["Габдуллы Тукая 62А"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8515902, lng: 49.071185, status: "free", addresses: ["Белинского 1/3"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8373959, lng: 49.1216543, status: "free", addresses: ["Мусина 68"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9005666, lng: 52.2603367, status: "free", addresses: ["Ленина 143"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7660612, lng: 49.1352807, status: "free", addresses: ["Хади Такташ 73"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.7353142, lng: 52.366056, status: "free", addresses: ["Шамиля Усманова 36Б"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9040777, lng: 52.3010786, status: "free", addresses: ["Ленина 30а"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7976388, lng: 49.19232, status: "free", addresses: ["Космонавтов 26"], region: "Приволжье" },
+        { name: "Казань", lat: 55.867213, lng: 49.0178135, status: "free", addresses: ["Беломорская 238"], region: "Приволжье" },
+        { name: "Казань", lat: 55.81768, lng: 49.1001598, status: "free", addresses: ["Декабристов 8"], region: "Приволжье" },
+        { name: "Курск", lat: 51.6747533, lng: 36.1509843, status: "free", addresses: ["Черняховского 6"], region: "Центральный" },
+        { name: "Казань", lat: 55.850624, lng: 49.0614005, status: "free", addresses: ["Тэцевская 4Д"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.348107, lng: 104.1578627, status: "free", addresses: ["Баумана 227"], region: "Сибирь" },
+        { name: "Набережные Челны", lat: 55.7353142, lng: 52.366056, status: "free", addresses: ["Раскольникова 48/1"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8254006, lng: 49.032082, status: "free", addresses: ["Можайского 2/37"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7644692, lng: 87.0931757, status: "free", addresses: ["Курако 1"], region: "Кузбасс" },
+        { name: "Нижнекамск", lat: 55.6266134, lng: 51.8070188, status: "free", addresses: ["Юности 12"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8616532, lng: 49.2214006, status: "free", addresses: ["Парковая 7"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.1483476, lng: 47.1721151, status: "free", addresses: ["Горького 51"], region: "Чувашия" },
+        { name: "Зеленодольск", lat: 55.8491676, lng: 48.4941366, status: "free", addresses: ["Энгельса 30"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7867627, lng: 49.2245235, status: "free", addresses: ["Бигичева 16А"], region: "Приволжье" },
+        { name: "Курск", lat: 51.7229977, lng: 36.172055, status: "free", addresses: ["Дзержинского 69"], region: "Центральный" },
+        { name: "Зеленодольск", lat: 55.8499732, lng: 48.517165, status: "free", addresses: ["Карла Маркса 54"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.15, lng: 47.25, status: "free", addresses: ["Винокурова 28"], region: "Чувашия" },
+        { name: "Чебоксары", lat: 56.0929391, lng: 47.285851, status: "free", addresses: ["Эгерский бульвар 47"], region: "Чувашия" },
+        { name: "Казань", lat: 55.8316345, lng: 49.0528627, status: "free", addresses: ["Восстания 117"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.6866922, lng: 52.3371841, status: "free", addresses: ["Сармановский тракт 18/38А"], region: "Приволжье" },
+        { name: "Зеленодольск", lat: 55.858753, lng: 48.5582667, status: "free", addresses: ["Королева 9"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7660612, lng: 49.1352807, status: "free", addresses: ["Хади Такташ 105"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.8945572, lng: 52.3370328, status: "free", addresses: ["Промышленная 1В Бург"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6556295, lng: 51.8244861, status: "free", addresses: ["Менделеева 35А"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.2643279, lng: 104.207995, status: "free", addresses: ["Рябикова 42А (ХС17)"], region: "Сибирь" },
+        { name: "Набережные Челны", lat: 55.7488569, lng: 52.4395587, status: "free", addresses: ["Автозаводский Проспект 28/14"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.900687, lng: 52.2940464, status: "free", addresses: ["Ленина 50"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.1336541, lng: 47.2814248, status: "free", addresses: ["Калинина 102"], region: "Чувашия" },
+        { name: "Казань", lat: 55.8299729, lng: 49.0817763, status: "free", addresses: ["Декабристов 150"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9020378, lng: 52.2998639, status: "free", addresses: ["Ленина 31"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.141403, lng: 47.2412784, status: "free", addresses: ["Советская 13"], region: "Чувашия" },
+        { name: "Чебоксары", lat: 56.1114381, lng: 47.2624535, status: "free", addresses: ["Привокзальная 1Д"], region: "Чувашия" },
+        { name: "Зеленодольск", lat: 55.8601394, lng: 48.5713358, status: "free", addresses: ["Строителей 30"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7626618, lng: 49.1773491, status: "free", addresses: ["Карбышева 40"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.282564, lng: 104.3117568, status: "free", addresses: ["Декабрьских событий 105а"], region: "Сибирь" },
+        { name: "Казань", lat: 55.838295, lng: 49.1568294, status: "free", addresses: ["Гаврилова 40"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8407379, lng: 49.0348181, status: "free", addresses: ["Ютазинская 3"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.6866922, lng: 52.3371841, status: "free", addresses: ["Сармановский тракт 68"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.632466, lng: 51.8182315, status: "free", addresses: ["Школьный Бульвар 3"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7654958, lng: 49.1479464, status: "free", addresses: ["Павлюхина 116"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9041765, lng: 52.3036113, status: "free", addresses: ["Ленина 24"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.743865, lng: 87.1449461, status: "free", addresses: ["Дружбы 3"], region: "Кузбасс" },
+        { name: "Набережные Челны", lat: 55.723011, lng: 52.3719631, status: "free", addresses: ["Шамиля Усманова 47"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.7486617, lng: 52.4296518, status: "free", addresses: ["Шишкинский бульвар 8А"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.8945572, lng: 52.3370328, status: "free", addresses: ["Промышленная 1В"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7474212, lng: 49.1895599, status: "free", addresses: ["Мавлютова 48"], region: "Приволжье" },
+        { name: "Казань", lat: 55.856523, lng: 48.9063986, status: "free", addresses: ["Ильгама Шакирова 5"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8066225, lng: 49.1924598, status: "free", addresses: ["Губкина 17"], region: "Приволжье" },
+        { name: "Казань", lat: 55.76385, lng: 49.1743857, status: "free", addresses: ["Даурская 38б"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.7535335, lng: 52.410096, status: "free", addresses: ["Сююмбике 9/26"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6360462, lng: 51.8262339, status: "free", addresses: ["Лемаева 2А"], region: "Приволжье" },
+        { name: "Казань", lat: 55.792141, lng: 49.2477809, status: "free", addresses: ["Азата Аббасова 10"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7567811, lng: 87.1024546, status: "free", addresses: ["Куйбышева 3"], region: "Кузбасс" },
+        { name: "Чебоксары", lat: 56.1258346, lng: 47.2613544, status: "free", addresses: ["Гагарина 17Б"], region: "Чувашия" },
+        { name: "Зеленодольск", lat: 52.3811823, lng: 59.8928229, status: "free", addresses: ["Школьная 14А"], region: "Приволжье" },
+        { name: "Набережные Челны", lat: 55.7469402, lng: 52.4230019, status: "free", addresses: ["Вахитова 20"], region: "Приволжье" },
+        { name: "Зеленодольск", lat: 55.8542268, lng: 48.5637633, status: "free", addresses: ["Королева 3А"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6348859, lng: 51.8137416, status: "free", addresses: ["Тихая аллея 14"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7887, lng: 49.1221, status: "free", addresses: ["2-я юго-западная 30"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8185487, lng: 49.0904202, status: "free", addresses: ["Декабристов 85"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8046227, lng: 49.2680335, status: "free", addresses: ["Мира 7"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6275584, lng: 51.8009165, status: "free", addresses: ["Химиков 36"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9043316, lng: 52.3311303, status: "free", addresses: ["Герцена 80А"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.648971, lng: 51.8045737, status: "free", addresses: ["Чулман 9"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7167291, lng: 49.1832636, status: "free", addresses: ["Братьев Батталовых 27"], region: "Приволжье" },
+        { name: "Иркутск", lat: 52.3509797, lng: 104.1510173, status: "free", addresses: ["Баумана 233Е"], region: "Сибирь" },
+        { name: "Набережные Челны", lat: 55.7357509, lng: 52.4167499, status: "free", addresses: ["Проспект Московский 145а"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7495133, lng: 87.1267177, status: "free", addresses: ["Кутузова 60/1"], region: "Кузбасс" },
+        { name: "Казань", lat: 55.7408562, lng: 49.195104, status: "free", addresses: ["Проспект Победы 18Б"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9026867, lng: 52.272227, status: "free", addresses: ["Строителей 35"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6555118, lng: 51.8456571, status: "free", addresses: ["Кайманова 16"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6329055, lng: 51.7965614, status: "free", addresses: ["Студенческая 14А"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6426394, lng: 51.824189, status: "free", addresses: ["Химиков 15В"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7703912, lng: 87.1181322, status: "free", addresses: ["Строителей 47/9"], region: "Кузбасс" },
+        { name: "Казань", lat: 55.8407738, lng: 49.150256, status: "free", addresses: ["Адоратского 38Д"], region: "Приволжье" },
+        { name: "Нижнекамск", lat: 55.6288703, lng: 51.820194, status: "free", addresses: ["Строителей 10Е"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.1346777, lng: 47.2454233, status: "free", addresses: ["Карла Маркса 19"], region: "Чувашия" },
+        { name: "Казань", lat: 55.826697, lng: 49.0792134, status: "free", addresses: ["Энергетиков 3"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9062562, lng: 52.3177404, status: "free", addresses: ["Фахретдина 24"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9044, lng: 52.3154, status: "free", addresses: ["Куйбышева 32"], region: "Приволжье" },
+        { name: "Казань", lat: 55.7877415, lng: 49.1565745, status: "free", addresses: ["Достоевского 75"], region: "Приволжье" },
+        { name: "Казань", lat: 55.833136, lng: 48.9830989, status: "free", addresses: ["Горьковское шоссе 2Ак1"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9080395, lng: 52.3225209, status: "free", addresses: ["Тельмана 61"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8679724, lng: 48.8836038, status: "free", addresses: ["Нурихана Фаттаха 21/1"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7502471, lng: 87.1240705, status: "free", addresses: ["Бардина 24"], region: "Кузбасс" },
+        { name: "Альметьевск", lat: 54.9044, lng: 52.3154, status: "free", addresses: ["Ленинградская 47"], region: "Приволжье" },
+        { name: "Казань", lat: 55.8238115, lng: 49.0720095, status: "free", addresses: ["Серова 26"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7539938, lng: 87.1100351, status: "free", addresses: ["Суворова 2"], region: "Кузбасс" },
+        { name: "Новокузнецк", lat: 53.7579359, lng: 87.1270955, status: "free", addresses: ["Кирова 33"], region: "Кузбасс" },
+        { name: "Набережные Челны", lat: 55.7311946, lng: 52.38978, status: "free", addresses: ["Сююмбике 74а"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.9078488, lng: 52.3472208, status: "free", addresses: ["Тукая 13"], region: "Приволжье" },
+        { name: "Альметьевск", lat: 54.915075, lng: 52.3758822, status: "free", addresses: ["Султангалиева 8"], region: "Приволжье" },
+        { name: "Новокузнецк", lat: 53.7584666, lng: 87.1602509, status: "free", addresses: ["Кирова 97"], region: "Кузбасс" },
+        { name: "Новокузнецк", lat: 53.7546024, lng: 87.1630035, status: "free", addresses: ["Дружбы 65/2"], region: "Кузбасс" },
+        { name: "Казань", lat: 55.6063105, lng: 49.1217452, status: "free", addresses: ["Романтиков 129"], region: "Приволжье" },
+        { name: "Чебоксары", lat: 56.1124759, lng: 47.2433564, status: "free", addresses: ["Строителей 6"], region: "Чувашия" },
+        { name: "Новокузнецк", lat: 53.7515022, lng: 87.1131242, status: "free", addresses: ["Курако 12"], region: "Кузбасс" },
+        { name: "Курск", lat: 51.2324407, lng: 36.6776497, status: "free", addresses: ["Союзная 21"], region: "Центральный" },
+        { name: "Курск", lat: 51.6749671, lng: 36.1458291, status: "free", addresses: ["Харьковская 3"], region: "Центральный" }
+    ];
+
+    console.log(citiesDB);
+
+    const regions = [...new Set(citiesDB.map(c => c.region))];
+
+    let map;
+    let markers = [];
+    let currentCityStatus = null;
+    let currentCityName = "";
+    let activeRegionFilter = null;
+
+    function initMap() {
+        if(typeof ymaps === 'undefined') {
+            console.warn("Яндекс карты не загружены");
+            return;
+        }
+        ymaps.ready(() => {
+            map = new ymaps.Map("map", {
+                center: [62.0, 80.0],
+                zoom: 3,
+                controls: ["zoomControl", "fullscreenControl"]
+            });
+            placeAllMarkers();
+        });
+    }
+
+    function placeAllMarkers(filterRegion = null) {
+        if (!map) return;
+        markers.forEach(m => map.geoObjects.remove(m));
+        markers = [];
+        let filteredCities = filterRegion ? citiesDB.filter(c => c.region === filterRegion) : citiesDB;
+        filteredCities.forEach(city => {
+            const color = city.status === "busy" ? "#E6792A" : "#47A847";
+            const hint = city.status === "busy" ? `${city.name}: адреса: ${city.addresses?.join(", ") || "есть точки"}` : `${city.name}: СВОБОДНО! Можно открыть пекарню.`;
+            const marker = new ymaps.Placemark([city.lat, city.lng], {
+                hintContent: hint,
+                balloonContentHeader: `<b>${city.name}</b>`,
+                balloonContentBody: city.status === "busy"
+                    ? `<span style="color:#E6792A;">🏪 Занято</span><br/>📍 Адреса: ${city.addresses?.join("<br/>") || "действующие пекарни"}`
+                    : `<span style="color:#47A847;">✅ Свободен для открытия!</span><br/>Нажмите "Бронировать" после поиска.`,
+            }, {
+                preset: `islands#${color === "#47A847" ? "green" : "orange"}DotIcon`,
+                iconColor: color
+            });
+            marker.properties.set('cityName', city.name);
+            marker.properties.set('status', city.status);
+            marker.properties.set('addresses', city.addresses);
+            map.geoObjects.add(marker);
+            markers.push(marker);
+            marker.events.add('click', (e) => {
+                const cityName = e.get('target').properties.get('cityName');
+                const inputField = document.getElementById("citySearchInput");
+                if(inputField) inputField.value = cityName;
+                searchCity(cityName);
+            });
+        });
+        if (filterRegion && filteredCities.length > 0 && map.geoObjects.getBounds()) {
+            let bounds = map.geoObjects.getBounds();
+            if (bounds) map.setBounds(bounds, { checkZoomRange: true, zoomMargin: 50 });
+        }
+    }
+
+    function searchCity(query) {
+        console.log("Поиск города:", query);
+        if (!query || query.trim() === "") {
+            resetToFullMap();
+            return;
+        }
+        const normalized = query.trim().toLowerCase();
+        const found = citiesDB.find(c => c.name.toLowerCase() === normalized);
+
+        if (found) {
+            currentCityName = found.name;
+            currentCityStatus = found.status;
+            const statusDiv = document.getElementById("statusMessage");
+            const bookBtn = document.getElementById("bookCityBtn");
+            if (found.status === "free") {
+                statusDiv.innerHTML = `<span class="free-status">✅ ${found.name} — город свободен для открытия!</span>`;
+                if(bookBtn) bookBtn.style.display = "inline-block";
+            } else {
+                const addrList = found.addresses ? found.addresses.join(", ") : "несколько действующих пекарен";
+                statusDiv.innerHTML = `<span class="busy-status">⚠️ ${found.name} — занят. Адреса: ${addrList}</span>`;
+                if(bookBtn) bookBtn.style.display = "none";
+            }
+            if(map) {
+                map.setCenter([found.lat, found.lng], 11, {duration: 400});
+            }
+            if(activeRegionFilter) {
+                document.querySelectorAll('.region-btn').forEach(btn => btn.classList.remove('active-region'));
+                activeRegionFilter = null;
+                // перерисовываем все маркеры, чтобы не было фильтра
+                placeAllMarkers(null);
+            }
+        } else {
+            const statusDiv = document.getElementById("statusMessage");
+            const bookBtn = document.getElementById("bookCityBtn");
+            statusDiv.innerHTML = `❓ Город "${query}" не найден в базе, возможно он свободен. Свяжитесь с менеджером.`;
+            if(bookBtn) bookBtn.style.display = "inline-block";
+            currentCityStatus = "free_not_in_db";
+            currentCityName = query;
+        }
+    }
+
+    function resetToFullMap() {
+        const inputField = document.getElementById("citySearchInput");
+        if(inputField) inputField.value = "";
+        const statusDiv = document.getElementById("statusMessage");
+        if(statusDiv) statusDiv.innerHTML = "Введите город или выберите регион";
+        const bookBtn = document.getElementById("bookCityBtn");
+        if(bookBtn) bookBtn.style.display = "none";
+        currentCityName = "";
+        currentCityStatus = null;
+        if(activeRegionFilter) {
+            activeRegionFilter = null;
+            document.querySelectorAll('.region-btn').forEach(btn => btn.classList.remove('active-region'));
+        }
+        placeAllMarkers(null);
+        if(map) map.setCenter([62.0, 80.0], 3, {duration: 500});
+    }
+
+    function filterByRegion(region) {
+        activeRegionFilter = region;
+        const inputField = document.getElementById("citySearchInput");
+        if(inputField) inputField.value = "";
+        const statusDiv = document.getElementById("statusMessage");
+        if(statusDiv) statusDiv.innerHTML = `Показаны города региона: ${region}`;
+        const bookBtn = document.getElementById("bookCityBtn");
+        if(bookBtn) bookBtn.style.display = "none";
+        placeAllMarkers(region);
+        document.querySelectorAll('.region-btn').forEach(btn => {
+            if(btn.getAttribute('data-region') === region) btn.classList.add('active-region');
+            else btn.classList.remove('active-region');
+        });
+    }
+
+    function renderRegionButtons() {
+        const container = document.getElementById("regionButtonsList");
+        if(!container) return;
+        container.innerHTML = "";
+        regions.forEach(region => {
+            const btn = document.createElement("button");
+            btn.className = "region-btn";
+            btn.setAttribute("data-region", region);
+            const citiesInReg = citiesDB.filter(c => c.region === region);
+            const freeCount = citiesInReg.filter(c => c.status === "free").length;
+            const busyCount = citiesInReg.filter(c => c.status === "busy").length;
+            btn.innerHTML = `<span class="region-indicator ${freeCount > 0 ? '' : 'busy'}"></span> ${region} <span style="font-size:12px; margin-left:auto;">🟢${freeCount} 🟠${busyCount}</span>`;
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                filterByRegion(region);
+            });
+            container.appendChild(btn);
+        });
+        const resetBtn = document.createElement("button");
+        resetBtn.className = "region-btn";
+        resetBtn.innerHTML = "🌍 Вся карта (все регионы)";
+        resetBtn.style.marginTop = "12px";
+        resetBtn.style.borderTop = "2px solid #e0b03b";
+        resetBtn.addEventListener("click", () => resetToFullMap());
+        container.appendChild(resetBtn);
+    }
+
+    // Модальное окно
+    const modal = document.getElementById("callbackModal");
+    function openModal() { if(modal) modal.classList.add("modal-active"); }
+    function closeModal() { if(modal) modal.classList.remove("modal-active"); }
+
+    // ИНИЦИАЛИЗАЦИЯ ПОСЛЕ ЗАГРУЗКИ DOM
+    document.addEventListener("DOMContentLoaded", function() {
+        initChecksButtons();
+        initPointsButtons();
+        bindAssortmentListeners();
+        updateCalculatorUI();
+        renderRegionButtons();
+        initMap();
+
+        // ----- КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: ПРАВИЛЬНЫЙ ОБРАБОТЧИК ПОЛЯ ВВОДА -----
+        const searchInput = document.getElementById("citySearchInput");
+        if(searchInput) {
+            // Обработчик ввода текста
+            searchInput.addEventListener("input", function(e) {
+                const value = e.target.value;
+                if(value.trim() === "") {
+                    resetToFullMap();
+                } else {
+                    searchCity(value);
+                }
+            });
+        } else {
+            console.error("Элемент citySearchInput не найден!");
+        }
+
+        const clearBtn = document.getElementById("clearSearchBtn");
+        if(clearBtn) {
+            clearBtn.addEventListener("click", () => resetToFullMap());
+        }
+
+        const bookBtn = document.getElementById("bookCityBtn");
+        if(bookBtn) {
+            bookBtn.addEventListener("click", () => {
+                let cityForBooking = currentCityName || document.getElementById("citySearchInput")?.value.trim();
+                if(!cityForBooking) { alert("Укажите город"); return; }
+                window._bookingCity = cityForBooking;
+                openModal();
+            });
+        }
+
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        if(closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+
+        const submitModalBtn = document.getElementById("submitModalBtn");
+        if(submitModalBtn) {
+            submitModalBtn.addEventListener("click", () => {
+                const name = document.getElementById("modalName")?.value;
+                const phone = document.getElementById("modalPhone")?.value;
+                if(!name || !phone) { alert("Заполните имя и телефон"); return; }
+                alert(`Спасибо, ${name}! Заявка на город "${window._bookingCity || currentCityName}" принята. Менеджер свяжется с вами в ближайшее время.`);
+                closeModal();
+                const modalName = document.getElementById("modalName");
+                const modalPhone = document.getElementById("modalPhone");
+                const modalEmail = document.getElementById("modalEmail");
+                if(modalName) modalName.value = "";
+                if(modalPhone) modalPhone.value = "";
+                if(modalEmail) modalEmail.value = "";
+            });
+        }
+    });
+</script>
+</body>
+</html>
