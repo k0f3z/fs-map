@@ -147,7 +147,8 @@
         }
 
         .clear-search-btn {
-            background: #ffa647;
+            background: linear-gradient(0.25turn,rgba(255,95,0,1) 0%,rgba(245,168,0,1) 100%);
+            color: #fefefe;
             border: none;
             padding: 0 20px;
             border-radius: 60px;
@@ -257,7 +258,7 @@
             cursor: pointer;
         }
 
-        @media (max-width: 880px) {
+        @media (max-width: 480px) {
             .city-buttons {
                 gap: 8px;
             }
@@ -304,7 +305,7 @@
         }
 
         .region-btn {
-            padding: 12px 32px;
+            padding: 18px 32px;
             border-radius: 60px;
             border: none;
             font-family: inherit;
@@ -317,7 +318,7 @@
         }
 
         .region-btn.active {
-            background: #ffa647;
+            background: linear-gradient(0.25turn,rgba(255,95,0,1) 0%,rgba(245,168,0,1) 100%);
             color: white;
         }
 
@@ -455,6 +456,11 @@
             color: #2b4b2b;
             font-weight: 800;
         }
+        @media (max-width: 480px) {
+            .region-btn {
+                padding: 12px 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -564,7 +570,7 @@
 
 <div id="callbackModal" class="modal-overlay">
     <div class="modal-form">
-        <h3>📞 Забронировать пекарню</h3>
+        <h3>📞 Получить расчет на открытие</h3>
         <p style="margin: 8px 0; font-size: 14px;" id="modalAddressPreview">Оставьте контакты, наш менеджер свяжется с вами</p>
         <input type="text" placeholder="Ваше имя" id="modalName">
         <input type="tel" placeholder="Телефон" id="modalPhone">
@@ -970,11 +976,10 @@
                 balloonContentHeader: `<b>${shop.name}</b>`,
                 balloonContentBody: `
             <div style="padding: 5px;">
-                📍 <strong>${addressText}</strong><br/>
-                <span style="display: none; color:#47A847;">✅ Свободно для открытия</span><br/>
+                <span style="margin-bottom: 10px;">📍 <strong>${addressText}</strong></span><br><br>
                 <button id="bookShopBtn_${currentMarkers.length}"
-                        style="background:#ffa647; border:none; padding:10px 20px; border-radius:30px; color:white; font-weight:bold; cursor:pointer; width:100%;">
-                    📞 Забронировать эту пекарню
+                        style="background:linear-gradient(0.25turn,rgba(255,95,0,1) 0%,rgba(245,168,0,1) 100%); border:none; padding:10px 20px; border-radius:30px; color:white; font-weight:bold; cursor:pointer;">
+                    📞 Получить расчет на открытие
                 </button>
             </div>
         `,
