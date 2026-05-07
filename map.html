@@ -49,10 +49,6 @@
 
         .cities-sidebar {
             width: 300px;
-            /*background: #fefcf5;*/
-            /*border-radius: 28px;*/
-            /*padding: 20px;*/
-            /*border: 1px solid #efe6d4;*/
             height: auto;
             overflow-y: auto;
         }
@@ -72,7 +68,6 @@
             height: 100%;
             flex-direction: column;
             justify-content: space-between;
-            /*gap: 8px;*/
         }
 
         .city-btn {
@@ -261,6 +256,12 @@
             border-radius: 30px;
             margin-top: 12px;
             cursor: pointer;
+        }
+
+        @media (max-width: 880px) {
+            .city-buttons {
+                gap: 8px;
+            }
         }
 
         @media (max-width: 880px) {
