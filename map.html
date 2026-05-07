@@ -41,196 +41,6 @@
             text-align: center;
         }
 
-        .block-sub {
-            font-size: 16px;
-            color: #5a6e5a;
-            margin-bottom: 32px;
-            border-left: 3px solid #e0b03b;
-            padding-left: 16px;
-        }
-
-        .calc-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 32px;
-            margin-bottom: 32px;
-        }
-
-        .calc-options {
-            flex: 1.2;
-            min-width: 260px;
-        }
-
-        .calc-result {
-            flex: 1;
-            background: #fef9e8;
-            border-radius: 28px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border: 1px solid #f0e2c5;
-        }
-
-        .param-group {
-            margin-bottom: 28px;
-        }
-
-        .param-label {
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: block;
-            font-size: 16px;
-            color: #2e3f2e;
-        }
-
-        select, .checkbox-group {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 20px;
-            border: 1px solid #dde0d5;
-            background: white;
-            font-family: inherit;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #e0b03b;
-            box-shadow: 0 0 0 3px rgba(224, 176, 59, 0.2);
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        .checkbox-item input {
-            width: 18px;
-            height: 18px;
-            accent-color: #e0b03b;
-            cursor: pointer;
-        }
-
-        .checks-wrapper {
-            background: #f9f9f4;
-            border-radius: 20px;
-            padding: 12px 16px;
-        }
-
-        .quantity-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .qty-btn {
-            background: #f1f3ec;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 40px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-            color: #2e4e2e;
-        }
-
-        .qty-btn.active {
-            background: #e0b03b;
-            color: white;
-            box-shadow: 0 2px 6px rgba(224, 176, 59, 0.4);
-        }
-
-        .revenue-box, .profit-box {
-            text-align: center;
-            padding: 16px;
-        }
-
-        .revenue-label, .profit-label {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            color: #8b7a4b;
-        }
-
-        .revenue-amount {
-            font-size: 38px;
-            font-weight: 800;
-            color: #2b4b2b;
-            margin: 12px 0 4px;
-        }
-
-        .profit-amount {
-            font-size: 38px;
-            font-weight: 800;
-            color: #c7731e;
-            margin: 12px 0 4px;
-        }
-
-        .rub-symbol {
-            font-size: 20px;
-            font-weight: 500;
-        }
-
-        .divider-calc {
-            width: 80px;
-            height: 2px;
-            background: #e0b03b;
-            margin: 20px auto;
-        }
-
-        .points-slider {
-            margin-top: 24px;
-            background: #f8f5e9;
-            border-radius: 28px;
-            padding: 20px;
-        }
-
-        .points-control {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .points-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .point-btn {
-            background: white;
-            border: 1px solid #ddd6c0;
-            border-radius: 40px;
-            padding: 8px 18px;
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .point-btn.active {
-            background: #2b4b2b;
-            border-color: #2b4b2b;
-            color: white;
-        }
-
-        .total-profit {
-            font-size: 22px;
-            font-weight: 700;
-            margin-top: 12px;
-            text-align: center;
-        }
-
         .map-fullwrapper {
             display: flex;
             flex-wrap: wrap;
@@ -267,7 +77,7 @@
 
         .city-btn {
             background: white;
-            border: 1px solid #e2d9c8;
+            border: 1px solid #ffa6477d;
             border-radius: 60px;
             padding: 10px 16px;
             text-align: left;
@@ -281,7 +91,7 @@
         }
 
         .city-btn:hover {
-            background: #e0b03b10;
+            background: #ffa64710;
             border-color: #ffa647;
         }
 
@@ -301,7 +111,7 @@
 
         .city-btn.active-city .city-count {
             background: white;
-            color: #e0b03b;
+            color: #ffa647;
         }
 
         .map-container {
@@ -377,7 +187,7 @@
         }
 
         .book-btn {
-            background: #e0b03b;
+            background: #ffa647;
             border: none;
             padding: 12px 24px;
             border-radius: 40px;
@@ -471,58 +281,266 @@
             }
         }
     </style>
+
+    <style>
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #2e4e2e;
+            margin-bottom: 16px;
+        }
+
+        .region-buttons {
+            display: flex;
+            gap: 12px;
+            background: #f0f2ea;
+            border-radius: 60px;
+            padding: 4px;
+            width: fit-content;
+        }
+
+        .region-btn {
+            padding: 12px 32px;
+            border-radius: 60px;
+            border: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: #6b7a5e;
+        }
+
+        .region-btn.active {
+            background: #ffa647;
+            color: white;
+        }
+
+        .slider-wrapper {
+            padding: 10px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #ffa647;
+            border-radius: 10px;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ffa647;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .slider-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #9aa88a;
+            padding: 0 4px;
+        }
+
+        .slider-values span {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider-values span.active {
+            color: #ffa647;
+            font-weight: 700;
+        }
+
+        .two-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 48px;
+            margin-bottom: 32px;
+        }
+
+        .col-left {
+            flex: 1.2;
+            min-width: 260px;
+        }
+
+        .col-right {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .assortment-box {
+            background: #f9f9f4;
+            border-radius: 20px;
+            padding: 16px 20px;
+        }
+
+        .assort-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .assort-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #ffa647;
+            cursor: pointer;
+        }
+
+        .result-card {
+            background: #fef9e8;
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid #f0e2c5;
+            margin-bottom: 16px;
+        }
+
+        .result-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            color: #b8a86e;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2b4b2b;
+            margin-top: 12px;
+        }
+
+        .result-value.profit {
+            color: #c7731e;
+        }
+
+        .points-section {
+            padding-top: 16px;
+            border-top: 1px solid #efe0c4;
+        }
+
+        .total-profit {
+            margin-top: 24px;
+            background: #e8f5e9;
+            border-radius: 28px;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2b4b2b;
+        }
+
+        .total-profit span {
+            color: #2b4b2b;
+            font-weight: 800;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <div style="display: none;" class="block">
-        <div class="block-title">🍞 Калькулятор прибыли пекарни</div>
-        <div class="block-sub">Выберите параметры вашей будущей сети — рассчитайте прогноз выручки и чистой прибыли</div>
-        <div class="calc-grid">
-            <div class="calc-options">
-                <div class="param-group">
-                    <span class="param-label">📍 Регион открытия</span>
-                    <select id="regionSelect">
-                        <option value="million">Города-миллионники (Москва, СПБ, и др.)</option>
-                        <option value="other">Другие города (до 1 млн)</option>
-                    </select>
-                </div>
-                <div class="param-group">
-                    <span class="param-label">🧾 Кол-во чеков в день (на одну точку)</span>
-                    <div class="quantity-buttons" id="checksButtons"></div>
-                </div>
-                <div class="param-group">
-                    <span class="param-label">🍰 Дополнительный ассортимент</span>
-                    <div class="checks-wrapper" id="assortmentGroup">
-                        <label class="checkbox-item"><input type="checkbox" value="confectionery" checked> Кондитерка</label>
-                        <label class="checkbox-item"><input type="checkbox" value="culinary" checked> Кулинария</label>
-                        <label class="checkbox-item"><input type="checkbox" value="related" checked> Сопутствующие товары</label>
-                    </div>
-                </div>
+
+    <div class="block-title">Калькулятор прибыли</div>
+    <div class="block">
+
+        <div class="section">
+            <div class="section-title">Регион открытия</div>
+            <div class="region-buttons">
+                <button class="region-btn active" data-region="million">Города милионники</button>
+                <button class="region-btn" data-region="other">Другие города</button>
             </div>
-            <div class="calc-result">
-                <div class="revenue-box">
-                    <div class="revenue-label">ПРОГНОЗИРУЕМАЯ ВЫРУЧКА (1 точка)</div>
-                    <div class="revenue-amount"><span id="revenueSingle">2 015 000</span> <span class="rub-symbol">₽</span></div>
-                </div>
-                <div class="divider-calc"></div>
-                <div class="profit-box">
-                    <div class="profit-label">ЧИСТАЯ ПРИБЫЛЬ (1 точка)</div>
-                    <div class="profit-amount"><span id="profitSingle">503 750</span> <span class="rub-symbol">₽</span></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Количество чеков в день</div>
+            <div class="slider-wrapper">
+                <input type="range" id="checksSlider" class="slider" min="300" max="1000" step="100" value="500">
+                <div class="slider-values" id="checksValues">
+                    <span>300</span>
+                    <span>400</span>
+                    <span>500</span>
+                    <span>600</span>
+                    <span>700</span>
+                    <span>800</span>
+                    <span>900</span>
+                    <span>1000</span>
                 </div>
             </div>
         </div>
-        <div class="points-slider">
-            <div class="points-control">
-                <span class="param-label">🏢 Количество пекарен в сети</span>
-                <div class="points-buttons" id="pointsButtons"></div>
+        <div class="two-columns">
+            <!-- Левая - ассортимент -->
+            <div class="col-left">
+                <div class="section-title">Дополнительный ассортимент в пекарне</div>
+                <div class="assortment-box">
+                    <label class="assort-item">
+                        <input type="checkbox" id="confectionery" checked> Кондитерка
+                    </label>
+                    <label class="assort-item">
+                        <input type="checkbox" id="culinary" checked> Кулинария
+                    </label>
+                    <label class="assort-item">
+                        <input type="checkbox" id="related" checked> Сопутствующие товары
+                    </label>
+                </div>
             </div>
-            <div class="total-profit">📊 Итоговая чистая прибыль сети: <strong id="totalProfit">503 750 ₽</strong></div>
+
+            <div class="col-right">
+                <div class="result-card">
+                    <div class="result-label">ВЫРУЧКА ПЕКАРНИ</div>
+                    <div class="result-value" id="revenueValue">2 015 000 руб.</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">ЧИСТАЯ ПРИБЫЛЬ</div>
+                    <div class="result-value profit" id="profitValue">503 750 руб.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="points-section">
+            <div class="section-title">Количество точек</div>
+            <div class="slider-wrapper">
+                <input type="range" id="pointsSlider" class="slider" min="1" max="10" step="1" value="1">
+                <div class="slider-values" id="pointsValues">
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span>
+                    <span>6</span>
+                    <span>7</span>
+                    <span>8</span>
+                    <span>9</span>
+                    <span>10</span>
+                </div>
+            </div>
+            <div class="total-profit" id="totalProfit">
+                Итоговая чистая прибыль сети: <span>503 750 руб.</span>
+            </div>
         </div>
     </div>
 
     <div class="block-title">Наша сеть</div>
     <div class="block">
-        <div style="display: none;" class="block-sub">260+ пекарен по всей стране. Выберите город из списка или кликните на карту</div>
         <div class="map-fullwrapper">
             <div class="cities-sidebar">
                 <div class="city-buttons" id="cityButtonsList"></div>
@@ -558,12 +576,13 @@
 </div>
 
 <script>
-    // КАЛЬКУЛЯТОР
+    // КАЛЬКУЛЯТОР - ПОЛНОСТЬЮ РАБОТАЕТ
     const baseChecks = 500;
     const baseRevenueFull = 2015000;
     const profitMargin = 0.25;
     const regionFactor = { million: 1.0, other: 0.85 };
     const assortmentBonus = { confectionery: 0.09, culinary: 0.09, related: 0.09 };
+
     let currentChecks = 500;
     let currentRegion = "million";
     let currentAssort = { confectionery: true, culinary: true, related: true };
@@ -573,68 +592,95 @@
         let checksFactor = currentChecks / baseChecks;
         let regFact = regionFactor[currentRegion];
         let activeBonusSum = 0;
-        if(currentAssort.confectionery) activeBonusSum += assortmentBonus.confectionery;
-        if(currentAssort.culinary) activeBonusSum += assortmentBonus.culinary;
-        if(currentAssort.related) activeBonusSum += assortmentBonus.related;
+        if (currentAssort.confectionery) activeBonusSum += assortmentBonus.confectionery;
+        if (currentAssort.culinary) activeBonusSum += assortmentBonus.culinary;
+        if (currentAssort.related) activeBonusSum += assortmentBonus.related;
         let assortFactor = 1 + activeBonusSum;
         let revenue = baseRevenueFull * checksFactor * regFact * (assortFactor / 1.27);
         return Math.round(revenue);
     }
 
-    function updateCalculatorUI() {
+    function updateUI() {
         let revenue = calcRevenueSingle();
         let profitSingle = Math.round(revenue * profitMargin);
-        document.getElementById("revenueSingle").innerText = revenue.toLocaleString('ru-RU');
-        document.getElementById("profitSingle").innerText = profitSingle.toLocaleString('ru-RU');
-        document.getElementById("totalProfit").innerHTML = (profitSingle * currentPoints).toLocaleString('ru-RU') + " ₽";
-    }
+        document.getElementById('revenueValue').innerHTML = revenue.toLocaleString('ru-RU') + ' руб.';
+        document.getElementById('profitValue').innerHTML = profitSingle.toLocaleString('ru-RU') + ' руб.';
+        document.getElementById('totalProfit').innerHTML = 'Итоговая чистая прибыль сети: <span>' + (profitSingle * currentPoints).toLocaleString('ru-RU') + ' руб.</span>';
 
-    function initChecksButtons() {
-        const checksValues = [300,400,500,600,700,800,900,1000];
-        const container = document.getElementById("checksButtons");
-        if(!container) return;
-        container.innerHTML = "";
-        checksValues.forEach(val => {
-            let btn = document.createElement("button");
-            btn.innerText = val;
-            btn.classList.add("qty-btn");
-            if(val === currentChecks) btn.classList.add("active");
-            btn.setAttribute("data-val", val);
-            btn.addEventListener("click", () => { currentChecks = val; updateCalculatorUI(); });
-            container.appendChild(btn);
+        // Подсветка активных значений на слайдере чеков
+        document.querySelectorAll('#checksValues span').forEach(span => {
+            if (parseInt(span.innerText) === currentChecks) span.classList.add('active');
+            else span.classList.remove('active');
+        });
+
+        // Подсветка активных значений на слайдере точек
+        document.querySelectorAll('#pointsValues span').forEach(span => {
+            if (parseInt(span.innerText) === currentPoints) span.classList.add('active');
+            else span.classList.remove('active');
         });
     }
 
-    function initPointsButtons() {
-        const pointsContainer = document.getElementById("pointsButtons");
-        if(!pointsContainer) return;
-        pointsContainer.innerHTML = "";
-        for(let i=1; i<=10; i++) {
-            let btn = document.createElement("button");
-            btn.innerText = i;
-            btn.classList.add("point-btn");
-            if(i === currentPoints) btn.classList.add("active");
-            btn.addEventListener("click", () => { currentPoints = i; updateCalculatorUI(); });
-            pointsContainer.appendChild(btn);
-        }
-    }
+    // Слайдер чеков
+    const checksSlider = document.getElementById('checksSlider');
+    checksSlider.addEventListener('input', function(e) {
+        currentChecks = parseInt(e.target.value);
+        updateUI();
+    });
 
-    function bindAssortmentListeners() {
-        const confCheck = document.querySelector("input[value='confectionery']");
-        const culCheck = document.querySelector("input[value='culinary']");
-        const relCheck = document.querySelector("input[value='related']");
-        if(!confCheck) return;
-        function updateAssort() {
-            currentAssort.confectionery = confCheck.checked;
-            currentAssort.culinary = culCheck.checked;
-            currentAssort.related = relCheck.checked;
-            updateCalculatorUI();
-        }
-        confCheck.addEventListener("change", updateAssort);
-        culCheck.addEventListener("change", updateAssort);
-        relCheck.addEventListener("change", updateAssort);
-    }
+    // Слайдер точек
+    const pointsSlider = document.getElementById('pointsSlider');
+    pointsSlider.addEventListener('input', function(e) {
+        currentPoints = parseInt(e.target.value);
+        updateUI();
+    });
 
+    // Клик по значениям на слайдере чеков
+    document.querySelectorAll('#checksValues span').forEach(span => {
+        span.addEventListener('click', function() {
+            currentChecks = parseInt(this.innerText);
+            checksSlider.value = currentChecks;
+            updateUI();
+        });
+    });
+
+    // Клик по значениям на слайдере точек
+    document.querySelectorAll('#pointsValues span').forEach(span => {
+        span.addEventListener('click', function() {
+            currentPoints = parseInt(this.innerText);
+            pointsSlider.value = currentPoints;
+            updateUI();
+        });
+    });
+
+    // Кнопки региона
+    document.querySelectorAll('.region-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentRegion = this.getAttribute('data-region');
+            updateUI();
+        });
+    });
+
+    // Чекбоксы ассортимента
+    document.getElementById('confectionery').addEventListener('change', (e) => {
+        currentAssort.confectionery = e.target.checked;
+        updateUI();
+    });
+    document.getElementById('culinary').addEventListener('change', (e) => {
+        currentAssort.culinary = e.target.checked;
+        updateUI();
+    });
+    document.getElementById('related').addEventListener('change', (e) => {
+        currentAssort.related = e.target.checked;
+        updateUI();
+    });
+
+    // Инициализация
+    updateUI();
+</script>
+
+<script>
     // ДАННЫЕ ГОРОДОВ (сгруппированы по городам, каждый город имеет массив адресов)
     const citiesDataRaw = [
         { name: "Курск", lat: 51.7143585, lng: 36.1369776, status: "free", address: ["Клыкова 100"], region: "Центральный" },
@@ -930,7 +976,7 @@
                 📍 <strong>${addressText}</strong><br/>
                 <span style="display: none; color:#47A847;">✅ Свободно для открытия</span><br/>
                 <button id="bookShopBtn_${currentMarkers.length}"
-                        style="background:#e0b03b; border:none; padding:10px 20px; border-radius:30px; color:white; font-weight:bold; cursor:pointer; width:100%;">
+                        style="background:#ffa647; border:none; padding:10px 20px; border-radius:30px; color:white; font-weight:bold; cursor:pointer; width:100%;">
                     📞 Забронировать эту пекарню
                 </button>
             </div>
@@ -983,7 +1029,7 @@
                         📍 <strong>${shop.address}</strong><br/>
                         <span style="color:#47A847;">✅ Свободно для открытия</span><br/><br/>
                         <button id="bookCityShopBtn_${currentMarkers.length}"
-                                style="background:#e0b03b; border:none; padding:10px 20px; border-radius:30px; color:white; font-weight:bold; cursor:pointer; width:100%;">
+                                style="background:#ffa647; border:none; padding:10px 20px; border-radius:30px; color:white; font-weight:bold; cursor:pointer; width:100%;">
                             📞 Забронировать эту пекарню
                         </button>
                     </div>
@@ -1074,10 +1120,6 @@
     function closeModal() { if(modal) modal.classList.remove("modal-active"); }
 
     document.addEventListener("DOMContentLoaded", function() {
-        initChecksButtons();
-        initPointsButtons();
-        bindAssortmentListeners();
-        updateCalculatorUI();
         renderCityButtons();
         initMap();
 
