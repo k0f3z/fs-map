@@ -592,7 +592,7 @@
 </div>
 
 <script>
-    // БАЗОВЫЕ НАСТРОЙКИ (на основе данных клиента)
+    // БАЗОВЫЕ НАСТРОЙКИ
     const baseChecks = 500;
     const baseRevenueFull = 2900000;  // Базовая выручка при 500 чеках и всех ассортиментах
     const profitMargin = 0.203;       // 20.3% чистая прибыль
@@ -719,109 +719,6 @@
     // Инициализация
     updateUI();
 </script>
-
-<!--<script>-->
-<!--    const baseChecks = 500;-->
-<!--    const baseRevenueFull = 2015000;-->
-<!--    const profitMargin = 0.25;-->
-<!--    const regionFactor = { million: 1.0, other: 0.85 };-->
-<!--    const assortmentBonus = { confectionery: 0.09, culinary: 0.09, related: 0.09 };-->
-
-<!--    let currentChecks = 500;-->
-<!--    let currentRegion = "million";-->
-<!--    let currentAssort = { confectionery: true, culinary: true, related: true };-->
-<!--    let currentPoints = 1;-->
-
-<!--    function calcRevenueSingle() {-->
-<!--        let checksFactor = currentChecks / baseChecks;-->
-<!--        let regFact = regionFactor[currentRegion];-->
-<!--        let activeBonusSum = 0;-->
-<!--        if (currentAssort.confectionery) activeBonusSum += assortmentBonus.confectionery;-->
-<!--        if (currentAssort.culinary) activeBonusSum += assortmentBonus.culinary;-->
-<!--        if (currentAssort.related) activeBonusSum += assortmentBonus.related;-->
-<!--        let assortFactor = 1 + activeBonusSum;-->
-<!--        let revenue = baseRevenueFull * checksFactor * regFact * (assortFactor / 1.27);-->
-<!--        return Math.round(revenue);-->
-<!--    }-->
-
-<!--    function updateUI() {-->
-<!--        let revenue = calcRevenueSingle();-->
-<!--        let profitSingle = Math.round(revenue * profitMargin);-->
-<!--        document.getElementById('revenueValue').innerHTML = revenue.toLocaleString('ru-RU') + ' руб.';-->
-<!--        document.getElementById('profitValue').innerHTML = profitSingle.toLocaleString('ru-RU') + ' руб.';-->
-<!--        document.getElementById('totalProfit').innerHTML = 'Итоговая чистая прибыль сети: <span>' + (profitSingle * currentPoints).toLocaleString('ru-RU') + ' руб.</span>';-->
-
-<!--        // Подсветка активных значений на слайдере чеков-->
-<!--        document.querySelectorAll('#checksValues span').forEach(span => {-->
-<!--            if (parseInt(span.innerText) === currentChecks) span.classList.add('active');-->
-<!--            else span.classList.remove('active');-->
-<!--        });-->
-
-<!--        // Подсветка активных значений на слайдере точек-->
-<!--        document.querySelectorAll('#pointsValues span').forEach(span => {-->
-<!--            if (parseInt(span.innerText) === currentPoints) span.classList.add('active');-->
-<!--            else span.classList.remove('active');-->
-<!--        });-->
-<!--    }-->
-
-<!--    // Слайдер чеков-->
-<!--    const checksSlider = document.getElementById('checksSlider');-->
-<!--    checksSlider.addEventListener('input', function(e) {-->
-<!--        currentChecks = parseInt(e.target.value);-->
-<!--        updateUI();-->
-<!--    });-->
-
-<!--    // Слайдер точек-->
-<!--    const pointsSlider = document.getElementById('pointsSlider');-->
-<!--    pointsSlider.addEventListener('input', function(e) {-->
-<!--        currentPoints = parseInt(e.target.value);-->
-<!--        updateUI();-->
-<!--    });-->
-
-<!--    // Клик по значениям на слайдере чеков-->
-<!--    document.querySelectorAll('#checksValues span').forEach(span => {-->
-<!--        span.addEventListener('click', function() {-->
-<!--            currentChecks = parseInt(this.innerText);-->
-<!--            checksSlider.value = currentChecks;-->
-<!--            updateUI();-->
-<!--        });-->
-<!--    });-->
-
-<!--    // Клик по значениям на слайдере точек-->
-<!--    document.querySelectorAll('#pointsValues span').forEach(span => {-->
-<!--        span.addEventListener('click', function() {-->
-<!--            currentPoints = parseInt(this.innerText);-->
-<!--            pointsSlider.value = currentPoints;-->
-<!--            updateUI();-->
-<!--        });-->
-<!--    });-->
-
-<!--    // Кнопки региона-->
-<!--    document.querySelectorAll('.region-btn').forEach(btn => {-->
-<!--        btn.addEventListener('click', function() {-->
-<!--            document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('active'));-->
-<!--            this.classList.add('active');-->
-<!--            currentRegion = this.getAttribute('data-region');-->
-<!--            updateUI();-->
-<!--        });-->
-<!--    });-->
-
-<!--    // Чекбоксы ассортимента-->
-<!--    document.getElementById('confectionery').addEventListener('change', (e) => {-->
-<!--        currentAssort.confectionery = e.target.checked;-->
-<!--        updateUI();-->
-<!--    });-->
-<!--    document.getElementById('culinary').addEventListener('change', (e) => {-->
-<!--        currentAssort.culinary = e.target.checked;-->
-<!--        updateUI();-->
-<!--    });-->
-<!--    document.getElementById('related').addEventListener('change', (e) => {-->
-<!--        currentAssort.related = e.target.checked;-->
-<!--        updateUI();-->
-<!--    });-->
-
-<!--    updateUI();-->
-<!--</script>-->
 
 <script>
     // ДАННЫЕ ГОРОДОВ
