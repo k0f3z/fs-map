@@ -36,7 +36,7 @@
             font-size: 42px;
             font-weight: 700;
             margin-bottom: 48px;
-            color: #2b4b2b;
+            color: #000;
             text-align: center;
         }
 
@@ -159,7 +159,7 @@
             border-radius: 60px;
             font-weight: 500;
             cursor: pointer;
-            height: 48px;
+            height: 44px;
         }
 
         .search-status {
@@ -263,12 +263,6 @@
             cursor: pointer;
         }
 
-        @media (max-width: 480px) {
-            .city-buttons {
-                gap: 8px;
-            }
-        }
-
         @media (max-width: 880px) {
             .map-fullwrapper {
                 flex-direction: column;
@@ -276,6 +270,10 @@
 
             .cities-sidebar {
                 width: 100%;
+            }
+
+            .city-buttons {
+                gap: 8px;
             }
 
             .block {
@@ -488,7 +486,7 @@
         <div class="section">
             <div class="section-title">Количество чеков в день</div>
             <div class="slider-wrapper">
-                <input type="range" id="checksSlider" class="slider" min="100" max="1000" step="100" value="500">
+                <input type="range" id="checksSlider" class="slider" min="100" max="1000" step="100" value="400">
                 <div class="slider-values" id="checksValues">
                     <span>100</span>
                     <span>200</span>
@@ -593,19 +591,19 @@
 
 <script>
     // БАЗОВЫЕ НАСТРОЙКИ (на основе данных клиента)
-    const baseChecks = 500;
+    const baseChecks = 400;  // это поменяем на 400
     const baseRevenueFull = 2900000;  // Базовая выручка при 500 чеках и всех ассортиментах
     const profitMargin = 0.203;       // 20.3% чистая прибыль
     const regionFactor = { million: 1.0, other: 0.85 };
 
     // Бонусы ассортимента (в процентах от базовой выручки)
     const assortmentBonus = {
-        confectionery: 0.07,  // +7% к выручке
-        culinary: 0.12,       // +12% к выручке
-        related: 0.03         // +3% к выручке
+        confectionery: 0.07,  // Кондитерка +7% к выручке
+        culinary: 0.12,       // Кулинария +12% к выручке
+        related: 0.03         // Сопутствующие товары +3% к выручке
     };
 
-    let currentChecks = 500;
+    let currentChecks = 400;
     let currentRegion = "million";
     let currentAssort = { confectionery: true, culinary: true, related: true };
     let currentPoints = 1;
@@ -1020,7 +1018,7 @@
                 </button>
             </div>
         `,
-            }, { preset: "islands#greenDotIcon", iconColor: "#47A847" });
+            }, { preset: "islands#greenDotIcon", iconColor: "#f5a800" });
 
             marker.properties.set('cityName', shop.name);
             marker.properties.set('address', addressText);
