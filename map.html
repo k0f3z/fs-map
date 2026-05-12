@@ -298,6 +298,13 @@
             margin-bottom: 16px;
         }
 
+        .section-text {
+            font-size: 14px;
+            color: #2e4e2e;
+            margin-bottom: 16px;
+            margin-top: 16px;
+        }
+
         .region-buttons {
             display: flex;
             gap: 12px;
@@ -481,6 +488,7 @@
                 <button class="region-btn active" data-region="million">Города милионники</button>
                 <button class="region-btn" data-region="other">Другие города</button>
             </div>
+            <div class="section-text">Площадь пекарни 80м<sup>2</sup></div>
         </div>
 
         <div class="section">
@@ -592,8 +600,8 @@
 <script>
     // БАЗОВЫЕ НАСТРОЙКИ (на основе данных клиента)
     const baseChecks = 400;  // это поменяем на 400
-    const baseRevenueFull = 3100000;  // Базовая выручка при 400 чеках и всех ассортиментах
-    const profitMargin = 0.203;       // 20.3% чистая прибыль
+    const baseRevenueFull = 2540984;  // Базовая выручка при 400 чеках и всех ассортиментах
+    const profitMargin = 0.200;       // 20.3% чистая прибыль
     const regionFactor = { million: 1.0, other: 0.85 };
 
     // Бонусы ассортимента (в процентах от базовой выручки)
@@ -698,7 +706,7 @@
         });
     });
 
-    // ЧЕКБОКСЫ АССОРТИМЕНТА - ТЕПЕРЬ ВЛИЯЮТ НА РАСЧЁТ
+    // ЧЕКБОКСЫ АССОРТИМЕНТА
     document.getElementById('confectionery').addEventListener('change', function(e) {
         currentAssort.confectionery = e.target.checked;
         updateUI();
@@ -1071,7 +1079,7 @@
                         </button>
                     </div>
                 `,
-            }, { preset: "islands#greenDotIcon", iconColor: "#47A847" });
+            }, { preset: "islands#greenDotIcon", iconColor: "#f5a800" });
 
             marker.properties.set('cityName', cityName);
             marker.properties.set('address', shop.address);
