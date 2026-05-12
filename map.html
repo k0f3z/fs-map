@@ -1072,10 +1072,9 @@
                 balloonContentBody: `
                     <div style="padding: 5px;">
                         📍 <strong>${shop.address}</strong><br/>
-                        <span style="color:#47A847;">✅ Свободно для открытия</span><br/><br/>
                         <button id="bookCityShopBtn_${currentMarkers.length}"
                                 style="background:#ffa647; border:none; padding:10px 20px; border-radius:30px; color:white; font-weight:bold; cursor:pointer; width:100%;">
-                            📞 Забронировать эту пекарню
+                            📞 Получить расчет на открытие
                         </button>
                     </div>
                 `,
@@ -1140,7 +1139,7 @@
         document.getElementById("bookCityBtn").style.display = "none";
         document.querySelectorAll('.city-btn').forEach(btn => btn.classList.remove('active-city'));
         showAllMarkers();
-        if(map) map.setCenter([55.76, 37.64], 4, { duration: 500 });
+        if(map) map.setCenter([62.0, 80.0], 3, { duration: 500 });
     }
 
     function renderCityButtons() {
