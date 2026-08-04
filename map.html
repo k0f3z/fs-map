@@ -593,17 +593,15 @@
 </div>
 
 <script>
-    // БАЗОВЫЕ НАСТРОЙКИ (на основе данных клиента)
-    const baseChecks = 400;  // это поменяем на 400
-    const baseRevenueFull = 2540984;  // Базовая выручка при 400 чеках и всех ассортиментах
-    const profitMargin = 0.200;       // 20.3% чистая прибыль
+    const baseChecks = 400;
+    const baseRevenueFull = 2540984;
+    const profitMargin = 0.200;
     const regionFactor = { million: 1.0, other: 0.85 };
 
-    // Бонусы ассортимента (в процентах от базовой выручки)
     const assortmentBonus = {
-        confectionery: 0.07,  // Кондитерка +7% к выручке
-        culinary: 0.12,       // Кулинария +12% к выручке
-        related: 0.03         // Сопутствующие товары +3% к выручке
+        confectionery: 0.07,
+        culinary: 0.12,
+        related: 0.03
     };
 
     let currentChecks = 400;
@@ -611,24 +609,19 @@
     let currentAssort = { confectionery: true, culinary: true, related: true };
     let currentPoints = 1;
 
-    // РАСЧЁТ ВЫРУЧКИ С УЧЁТОМ ВСЕХ ПАРАМЕТРОВ
     function calcRevenueSingle() {
-        // 1. Фактор количества чеков
+
         let checksFactor = currentChecks / baseChecks;
 
-        // 2. Фактор региона
         let regFact = regionFactor[currentRegion];
 
-        // 3. Фактор ассортимента (сумма бонусов от включённых опций)
         let assortmentBonusSum = 0;
         if (currentAssort.confectionery) assortmentBonusSum += assortmentBonus.confectionery;
         if (currentAssort.culinary) assortmentBonusSum += assortmentBonus.culinary;
         if (currentAssort.related) assortmentBonusSum += assortmentBonus.related;
 
-        // Базовый множитель ассортимента (1 + сумма бонусов)
         let assortFactor = 1 + assortmentBonusSum;
 
-        // Итоговая выручка
         let revenue = baseRevenueFull * checksFactor * regFact * assortFactor;
 
         return Math.round(revenue);
@@ -646,34 +639,29 @@
         document.getElementById('profitValue').innerHTML = profitSingle.toLocaleString('ru-RU') + ' руб.';
         document.getElementById('totalProfit').innerHTML = 'Итоговая чистая прибыль сети: <span>' + (profitSingle * currentPoints).toLocaleString('ru-RU') + ' руб.</span>';
 
-        // Подсветка активных значений на слайдере чеков
         document.querySelectorAll('#checksValues span').forEach(span => {
             if (parseInt(span.innerText) === currentChecks) span.classList.add('active');
             else span.classList.remove('active');
         });
 
-        // Подсветка активных значений на слайдере точек
         document.querySelectorAll('#pointsValues span').forEach(span => {
             if (parseInt(span.innerText) === currentPoints) span.classList.add('active');
             else span.classList.remove('active');
         });
     }
 
-    // Слайдер чеков
     const checksSlider = document.getElementById('checksSlider');
     checksSlider.addEventListener('input', function(e) {
         currentChecks = parseInt(e.target.value);
         updateUI();
     });
 
-    // Слайдер точек
     const pointsSlider = document.getElementById('pointsSlider');
     pointsSlider.addEventListener('input', function(e) {
         currentPoints = parseInt(e.target.value);
         updateUI();
     });
 
-    // Клик по значениям на слайдере чеков
     document.querySelectorAll('#checksValues span').forEach(span => {
         span.addEventListener('click', function() {
             currentChecks = parseInt(this.innerText);
@@ -682,7 +670,6 @@
         });
     });
 
-    // Клик по значениям на слайдере точек
     document.querySelectorAll('#pointsValues span').forEach(span => {
         span.addEventListener('click', function() {
             currentPoints = parseInt(this.innerText);
@@ -691,7 +678,6 @@
         });
     });
 
-    // Кнопки региона
     document.querySelectorAll('.region-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('active'));
@@ -701,7 +687,6 @@
         });
     });
 
-    // ЧЕКБОКСЫ АССОРТИМЕНТА
     document.getElementById('confectionery').addEventListener('change', function(e) {
         currentAssort.confectionery = e.target.checked;
         updateUI();
@@ -717,12 +702,10 @@
         updateUI();
     });
 
-    // Инициализация
     updateUI();
 </script>
 
 <script>
-    // ДАННЫЕ ГОРОДОВ
     const citiesDataRaw = [
         { name: "Курск", lat: 51.7143585, lng: 36.1369776, status: "free", address: ["Клыкова 100"], region: "Центральный" },
         { name: "Иркутск", lat: 52.2489522, lng: 104.2721103, status: "free", address: ["Лермонтова 277А"], region: "Сибирь" },
@@ -975,7 +958,6 @@
         { name: "Курск", lat: 51.6749671, lng: 36.1458291, status: "free", address: ["Харьковская 3"], region: "Центральный" }
     ];
 
-    // Группировка по городам
     const citiesMap = new Map();
     citiesDataRaw.forEach(item => {
         if (!citiesMap.has(item.name)) {
@@ -1006,7 +988,7 @@
         currentMarkers = [];
 
         citiesDataRaw.forEach(shop => {
-            // Получаем адрес правильно: если это массив - берем первый элемент или объединяем
+
             const addressText = Array.isArray(shop.address) ? shop.address[0] : shop.address;
 
             const marker = new ymaps.Placemark([shop.lat, shop.lng], {
@@ -1050,13 +1032,11 @@
         const shops = citiesMap.get(cityName) || [];
         if (shops.length === 0) return;
 
-        // Обновляем активную кнопку в списке
         document.querySelectorAll('.city-btn').forEach(btn => {
             if(btn.getAttribute('data-city') === cityName) btn.classList.add('active-city');
             else btn.classList.remove('active-city');
         });
 
-        // Удаляем старые маркеры и показываем только маркеры выбранного города
         currentMarkers.forEach(m => map.geoObjects.remove(m));
         currentMarkers = [];
 
@@ -1096,12 +1076,10 @@
             });
         });
 
-        // Центрируем карту на первом маркере города
         if (shops[0]) {
             map.setCenter([shops[0].lat, shops[0].lng], 12, { duration: 400 });
         }
 
-        // Обновляем статус в поиске
         const statusDiv = document.getElementById("statusMessage");
         const bookBtn = document.getElementById("bookCityBtn");
         statusDiv.innerHTML = `<span class="free-status">✅ ${cityName} — ${shops.length} пекарня(и). Нажмите на маркер для бронирования адреса.</span>`;
@@ -1153,7 +1131,6 @@
         });
     }
 
-    // Модальное окно
     const modal = document.getElementById("callbackModal");
     function openModal() { if(modal) modal.classList.add("modal-active"); }
     function closeModal() { if(modal) modal.classList.remove("modal-active"); }
